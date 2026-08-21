@@ -1,0 +1,54 @@
+---
+import { SITE_TITLE } from "../consts";
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="brand">{SITE_TITLE}</a>
+    <nav>
+      <a href="/blog">블로그</a>
+      <a href="/rss.xml" aria-label="RSS 피드">RSS</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text);
+  }
+  .brand:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+  nav a {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  nav a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+</style>

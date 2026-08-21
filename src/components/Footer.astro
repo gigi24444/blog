@@ -1,0 +1,19 @@
+---
+import { SITE_TITLE } from "../consts";
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <p>© {year} {SITE_TITLE} · Claude API로 자동 생성됩니다</p>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+    padding: 2rem 1.25rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+</style>

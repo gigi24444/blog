@@ -1,8 +1,9 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import AdSlot from "../components/AdSlot.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import Sidebar from "../components/Sidebar.astro";
-import { SITE_TITLE } from "../consts";
 
 interface Props {
   title: string;
@@ -22,28 +23,29 @@ const formatted = (d: Date) =>
     <BaseHead title={title} description={description} />
   </head>
   <body>
-    <header><a href="/">{SITE_TITLE}</a></header>
+    <Header />
     <main>
       <div class="layout">
-        <article>
-          <h1>{title}</h1>
-          <p>
+        <article class="prose">
+          <p class="meta">
             <time datetime={pubDate.toISOString()}>{formatted(pubDate)}</time>
             {updatedDate && <> · 수정: <time datetime={updatedDate.toISOString()}>{formatted(updatedDate)}</time></>}
           </p>
+          <h1>{title}</h1>
           {tags.length > 0 && (
-            <p class="tags">
+            <div class="tags">
               {tags.map((tag) => <span class="tag">#{tag}</span>)}
-            </p>
+            </div>
           )}
           <hr />
           <AdSlot slot={import.meta.env.PUBLIC_ADSENSE_SLOT_IN_ARTICLE} layout="in-article" format="fluid" class="in-article" />
           <slot />
-          <p><a href="/blog">← 목록으로</a></p>
+          <p class="back-link"><a href="/blog">← 목록으로</a></p>
         </article>
         <Sidebar />
       </div>
     </main>
+    <Footer />
   </body>
 </html>
 
@@ -51,7 +53,7 @@ const formatted = (d: Date) =>
   main {
     max-width: 960px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 2.5rem 1.25rem;
   }
   .layout {
     display: flex;
@@ -62,6 +64,15 @@ const formatted = (d: Date) =>
     flex: 1;
     min-width: 0;
   }
+  .meta {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem;
+  }
+  h1 {
+    font-size: 2rem;
+    margin: 0 0 0.75rem;
+  }
   .in-article {
     margin: 1.5rem 0;
   }
@@ -69,10 +80,17 @@ const formatted = (d: Date) =>
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    margin-bottom: 1rem;
   }
   .tag {
-    font-size: 0.85rem;
-    color: #555;
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+  }
+  .back-link {
+    margin-top: 2.5rem;
   }
   @media (max-width: 860px) {
     .layout {

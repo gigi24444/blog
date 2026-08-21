@@ -2,8 +2,10 @@
 import { getCollection } from "astro:content";
 import BaseHead from "../../components/BaseHead.astro";
 import AdSlot from "../../components/AdSlot.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
 import Sidebar from "../../components/Sidebar.astro";
-import { SITE_TITLE } from "../../consts";
+import PostCard from "../../components/PostCard.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -15,26 +17,28 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     <BaseHead title="블로그" description="모든 글 목록" />
   </head>
   <body>
-    <header><a href="/">{SITE_TITLE}</a></header>
+    <Header />
     <main>
       <h1>블로그</h1>
       <AdSlot slot={import.meta.env.PUBLIC_ADSENSE_SLOT_BANNER} class="banner" />
       <div class="layout">
         <div class="content">
-          <ul>
+          <div class="post-grid">
             {posts.map((post) => (
-              <li>
-                <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-                <time datetime={post.data.pubDate.toISOString()}>
-                  {post.data.pubDate.toLocaleDateString("ko-KR")}
-                </time>
-              </li>
+              <PostCard
+                href={`/blog/${post.id}/`}
+                title={post.data.title}
+                description={post.data.description}
+                pubDate={post.data.pubDate}
+                tags={post.data.tags}
+              />
             ))}
-          </ul>
+          </div>
         </div>
         <Sidebar />
       </div>
     </main>
+    <Footer />
   </body>
 </html>
 
@@ -42,10 +46,14 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   main {
     max-width: 960px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 2.5rem 1.25rem;
+  }
+  h1 {
+    font-size: 1.75rem;
+    margin: 0 0 1rem;
   }
   .banner {
-    margin: 1rem 0;
+    margin: 1rem 0 1.5rem;
   }
   .layout {
     display: flex;
@@ -55,6 +63,10 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   .content {
     flex: 1;
     min-width: 0;
+  }
+  .post-grid {
+    display: grid;
+    gap: 1rem;
   }
   @media (max-width: 860px) {
     .layout {

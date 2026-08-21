@@ -3,7 +3,9 @@ import AdSlot from "./AdSlot.astro";
 ---
 
 <aside class="sidebar">
-  <AdSlot slot={import.meta.env.PUBLIC_ADSENSE_SLOT_SIDEBAR} />
+  <div class="sidebar-card">
+    <AdSlot slot={import.meta.env.PUBLIC_ADSENSE_SLOT_SIDEBAR} />
+  </div>
 </aside>
 
 <style>
@@ -11,9 +13,21 @@ import AdSlot from "./AdSlot.astro";
     width: 300px;
     flex-shrink: 0;
   }
+  .sidebar-card {
+    position: sticky;
+    top: 5rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    box-shadow: var(--shadow);
+  }
   @media (max-width: 860px) {
     .sidebar {
       width: 100%;
+    }
+    .sidebar-card {
+      position: static;
     }
   }
 </style>
