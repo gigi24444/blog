@@ -1,0 +1,59 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_TITLE } from "../consts";
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags: string[];
+}
+
+const { title, description, pubDate, updatedDate, tags } = Astro.props;
+const formatted = (d: Date) =>
+  d.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" });
+---
+
+<html lang="ko">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <header><a href="/">{SITE_TITLE}</a></header>
+    <main>
+      <article>
+        <h1>{title}</h1>
+        <p>
+          <time datetime={pubDate.toISOString()}>{formatted(pubDate)}</time>
+          {updatedDate && <> · 수정: <time datetime={updatedDate.toISOString()}>{formatted(updatedDate)}</time></>}
+        </p>
+        {tags.length > 0 && (
+          <p class="tags">
+            {tags.map((tag) => <span class="tag">#{tag}</span>)}
+          </p>
+        )}
+        <hr />
+        <slot />
+      </article>
+      <p><a href="/blog">← 목록으로</a></p>
+    </main>
+  </body>
+</html>
+
+<style>
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 0.85rem;
+    color: #555;
+  }
+</style>

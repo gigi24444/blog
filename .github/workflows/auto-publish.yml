@@ -1,0 +1,42 @@
+name: Auto publish
+
+on:
+  schedule:
+    # 매일 00:00 UTC (한국시간 09:00). 필요에 맞게 조정하세요: https://crontab.guru
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - name: 글 생성
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: npm run generate
+
+      - name: 외부 채널 배포
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: npm run distribute
+
+      - name: 변경사항 커밋 & 푸시
+        run: |
+          git config user.name "auto-blog-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/content/blog scripts/topics.json
+          git diff --cached --quiet && echo "변경 없음" && exit 0
+          git commit -m "chore: auto-generated post"
+          git push

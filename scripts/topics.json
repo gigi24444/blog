@@ -1,0 +1,5 @@
+{
+  "_comment": "topics 배열에 다룰 주제를 채워주세요. 각 항목은 { \"topic\": string, \"keywords\": string[] } 형태입니다. nextIndex는 스크립트가 자동으로 갱신하는 라운드로빈 커서이니 직접 건드리지 않아도 됩니다.",
+  "topics": [],
+  "nextIndex": 0
+}

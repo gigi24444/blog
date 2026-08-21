@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+---
+
+<html lang="ko">
+  <head>
+    <BaseHead />
+  </head>
+  <body>
+    <header><h1>{SITE_TITLE}</h1></header>
+    <main>
+      <p>{SITE_DESCRIPTION}</p>
+      <h2>최근 글</h2>
+      <ul>
+        {posts.map((post) => (
+          <li>
+            <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+          </li>
+        ))}
+      </ul>
+      <p><a href="/blog">모든 글 보기 →</a></p>
+    </main>
+  </body>
+</html>
