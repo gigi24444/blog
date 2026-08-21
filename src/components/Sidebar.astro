@@ -1,0 +1,19 @@
+---
+import AdSlot from "./AdSlot.astro";
+---
+
+<aside class="sidebar">
+  <AdSlot slot={import.meta.env.PUBLIC_ADSENSE_SLOT_SIDEBAR} />
+</aside>
+
+<style>
+  .sidebar {
+    width: 300px;
+    flex-shrink: 0;
+  }
+  @media (max-width: 860px) {
+    .sidebar {
+      width: 100%;
+    }
+  }
+</style>

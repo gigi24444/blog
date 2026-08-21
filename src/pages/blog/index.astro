@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import BaseHead from "../../components/BaseHead.astro";
+import AdSlot from "../../components/AdSlot.astro";
+import Sidebar from "../../components/Sidebar.astro";
 import { SITE_TITLE } from "../../consts";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -16,16 +18,47 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
     <header><a href="/">{SITE_TITLE}</a></header>
     <main>
       <h1>블로그</h1>
-      <ul>
-        {posts.map((post) => (
-          <li>
-            <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-            <time datetime={post.data.pubDate.toISOString()}>
-              {post.data.pubDate.toLocaleDateString("ko-KR")}
-            </time>
-          </li>
-        ))}
-      </ul>
+      <AdSlot slot={import.meta.env.PUBLIC_ADSENSE_SLOT_BANNER} class="banner" />
+      <div class="layout">
+        <div class="content">
+          <ul>
+            {posts.map((post) => (
+              <li>
+                <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString("ko-KR")}
+                </time>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <Sidebar />
+      </div>
     </main>
   </body>
 </html>
+
+<style>
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  .banner {
+    margin: 1rem 0;
+  }
+  .layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  .content {
+    flex: 1;
+    min-width: 0;
+  }
+  @media (max-width: 860px) {
+    .layout {
+      flex-direction: column;
+    }
+  }
+</style>

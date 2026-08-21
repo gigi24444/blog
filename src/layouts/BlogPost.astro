@@ -1,5 +1,7 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
+import AdSlot from "../components/AdSlot.astro";
+import Sidebar from "../components/Sidebar.astro";
 import { SITE_TITLE } from "../consts";
 
 interface Props {
@@ -22,30 +24,46 @@ const formatted = (d: Date) =>
   <body>
     <header><a href="/">{SITE_TITLE}</a></header>
     <main>
-      <article>
-        <h1>{title}</h1>
-        <p>
-          <time datetime={pubDate.toISOString()}>{formatted(pubDate)}</time>
-          {updatedDate && <> · 수정: <time datetime={updatedDate.toISOString()}>{formatted(updatedDate)}</time></>}
-        </p>
-        {tags.length > 0 && (
-          <p class="tags">
-            {tags.map((tag) => <span class="tag">#{tag}</span>)}
+      <div class="layout">
+        <article>
+          <h1>{title}</h1>
+          <p>
+            <time datetime={pubDate.toISOString()}>{formatted(pubDate)}</time>
+            {updatedDate && <> · 수정: <time datetime={updatedDate.toISOString()}>{formatted(updatedDate)}</time></>}
           </p>
-        )}
-        <hr />
-        <slot />
-      </article>
-      <p><a href="/blog">← 목록으로</a></p>
+          {tags.length > 0 && (
+            <p class="tags">
+              {tags.map((tag) => <span class="tag">#{tag}</span>)}
+            </p>
+          )}
+          <hr />
+          <AdSlot slot={import.meta.env.PUBLIC_ADSENSE_SLOT_IN_ARTICLE} layout="in-article" format="fluid" class="in-article" />
+          <slot />
+          <p><a href="/blog">← 목록으로</a></p>
+        </article>
+        <Sidebar />
+      </div>
     </main>
   </body>
 </html>
 
 <style>
   main {
-    max-width: 720px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 1rem;
+  }
+  .layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  article {
+    flex: 1;
+    min-width: 0;
+  }
+  .in-article {
+    margin: 1.5rem 0;
   }
   .tags {
     display: flex;
@@ -55,5 +73,10 @@ const formatted = (d: Date) =>
   .tag {
     font-size: 0.85rem;
     color: #555;
+  }
+  @media (max-width: 860px) {
+    .layout {
+      flex-direction: column;
+    }
   }
 </style>

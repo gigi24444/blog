@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
+import AdSlot from "../components/AdSlot.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
@@ -16,6 +17,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
     <header><h1>{SITE_TITLE}</h1></header>
     <main>
       <p>{SITE_DESCRIPTION}</p>
+      <AdSlot slot={import.meta.env.PUBLIC_ADSENSE_SLOT_BANNER} class="banner" />
       <h2>최근 글</h2>
       <ul>
         {posts.map((post) => (
@@ -28,3 +30,9 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
     </main>
   </body>
 </html>
+
+<style>
+  .banner {
+    margin: 1rem 0;
+  }
+</style>
